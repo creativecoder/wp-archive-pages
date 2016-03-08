@@ -260,7 +260,10 @@ function get_post_type_archive_page( $post_type ) {
 }
 
 add_action( 'admin_init', function () {
-	include_once( 'WordPress-GitHub-Plugin-Updater/updater.php' );
+
+	if ( ! class_exists('WP_GitHub_Updater') ) {
+		include_once( 'WordPress-GitHub-Plugin-Updater/updater.php' );
+	}
 
 	define( 'WP_GITHUB_FORCE_UPDATE', true );
 
