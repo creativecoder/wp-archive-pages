@@ -6,3 +6,5 @@ A WordPress plugin that creates a post type to hold settings for every archive p
 
 2. Each custom post type in your WordPress install will now have a new menu item called "Archive Page"
 that holds page settings and custom fields for display on your archive page
+
+Credit goes to @pllumh for the initial concept and implementation of this plugin.
