@@ -3,7 +3,7 @@
 Plugin Name: Archive Pages
 Plugin URI:  https://github.com/creativecoder/wp-archive-pages
 Description: Creates a page to hold settings for each post type archive page on your site
-Version:     0.1.2
+Version:     0.1.3
 Author:      Grant Kinney
 Author URI:  https://github.com/creativecoder
 License:     GPL2
@@ -17,6 +17,8 @@ class Archive_Pages {
 	 * Name of archive page post type
 	 */
 	const POST_TYPE = 'archive_page';
+	const POST_TYPE_NAME = 'Archive Page';
+	const POST_TYPE_NAME_PLURAL = 'Archive Pages';
 
 	/**
 	 * Name of meta key used for post meta to connect archive pages with registered custom post types
@@ -48,16 +50,38 @@ class Archive_Pages {
 	 * @return void
 	 */
 	public function register_post_type() {
+		$labels = array(
+			'name'                  => sprintf( _x( '%s', 'archive page general name', 'archive-pages' ), self::POST_TYPE_NAME_PLURAL ), 
+			'singular_name'         => sprintf( _x( '%s', 'archive page singular name', 'archive-pages' ), self::POST_TYPE_NAME ),
+			'add_new'               => _x( 'Add New', 'add new archive page', 'archive-pages' ),
+			'add_new_item'          => sprintf( _x( 'Add New %s', 'add new archive page', 'archive-pages' ), self::POST_TYPE_NAME ),
+			'edit_item'             => sprintf( _x( 'Edit %s', 'edit archive page', 'archive-pages' ), self::POST_TYPE_NAME ),
+			'new_item'              => sprintf( _x( 'New %s', 'create new archive page', 'archive-pages' ), self::POST_TYPE_NAME ),
+			'view_item'             => sprintf( _x( 'View %', 'view archive page', 'archive-pages' ), self::POST_TYPE_NAME ),
+			'search_items'          => sprintf( _x( 'Search %s', 'search archive page', 'archive-pages' ), self::POST_TYPE_NAME_PLURAL ),
+			'not_found'             => sprintf( _x( 'No %s found', 'no archive pages found', 'archive-pages' ), self::POST_TYPE_NAME_PLURAL ),
+			'not_found_in_trash'    => sprintf( _x( 'No %s found in Trash', 'no archive pages found', 'archive-pages' ), self::POST_TYPE_NAME_PLURAL ),
+			'parent_item_colon'     => sprintf( _x( 'Parent %s', 'archive page name', 'archive-pages' ), self::POST_TYPE_NAME ),
+			'all_items'             => sprintf( _x( 'All %s', 'archive page plural name', 'archive-pages' ), self::POST_TYPE_NAME_PLURAL ),
+			'archives'              => sprintf( _x( '%s Archives', 'archive page archives', 'archive-pages' ), self::POST_TYPE_NAME ),
+			'insert_into_item'      => sprintf( _x( 'Insert into %s', 'insert into archive page', 'archive-pages' ), self::POST_TYPE_NAME ),
+			'uploaded_to_this_item' => sprintf( _x( 'Uploaded to this %s', 'uploaded to archive page', 'archive-pages' ), self::POST_TYPE_NAME ),
+			'filter_items_list'     => sprintf( _x( 'Filter %s list', 'filter archive page list', 'archive-pages' ), self::POST_TYPE_NAME_PLURAL ),
+			'items_list_navigation' => sprintf( _x( '%s list navigation', 'archive page list navigation', 'archive-pages' ), self::POST_TYPE_NAME_PLURAL ),
+			'items_list'            => sprintf( _x( '%s list', 'archive page list', 'archive-pages' ), self::POST_TYPE_NAME_PLURAL ),
+		);
+
 		$args = array(
+			'labels'             => $labels,
 			'public'             => true,
-			'show_ui'            => false,
+			'show_ui'            => true,
 			'show_in_menu'       => false,
 			// Don't map meta capabilities since we're explicitly defining them below
 			'map_meta_cap'       => false,
 			// Set to an empty string since we are manually specifying the capabilities, below
 			'capability_type'    => '',
 			// We set these manually to allow editing and disallow creating and deleting
-			'capabilities' => array(
+			'capabilities'       => array(
 				'edit_post'              => self::CAPABILITY,
 				'read_post'              => self::CAPABILITY,
 				'delete_post'            => false,
@@ -226,7 +250,7 @@ new Archive_Pages();
  */
 function get_edit_archive_page_link( $post_type ) {
 	$post = get_post_type_archive_page( $post_type );
-	$url = get_edit_post_link( $post->ID );
+	$url = isset( $post->ID ) ? get_edit_post_link( $post->ID ) : false;
 
 	return $url;
 }
