@@ -3,7 +3,7 @@
 Plugin Name: Archive Pages
 Plugin URI:  https://github.com/creativecoder/wp-archive-pages
 Description: Creates a page to hold settings for each post type archive page on your site
-Version:     0.1.3
+Version:     0.1.4
 Author:      Grant Kinney
 Author URI:  https://github.com/creativecoder
 License:     GPL2
@@ -284,6 +284,7 @@ function get_post_type_archive_page( $post_type ) {
 }
 
 add_action( 'admin_init', function () {
+	if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) { return; }
 
 	if ( ! class_exists('WP_GitHub_Updater') ) {
 		include_once( 'WordPress-GitHub-Plugin-Updater/updater.php' );
